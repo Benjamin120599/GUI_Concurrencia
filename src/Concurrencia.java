@@ -5,11 +5,12 @@ import java.awt.*;
 class VentanaPrincipal extends JFrame {
 	
 	JTextArea areaSi, areaNo;
+	JButton boton1, boton2;
 	
 	public VentanaPrincipal() {
 		getContentPane().setLayout(null);
 		getContentPane().setBackground(new Color(209, 209, 209));
-		setSize(400, 500);
+		setSize(400, 350);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -17,7 +18,6 @@ class VentanaPrincipal extends JFrame {
 		setVisible(true);
 		
 		//Componentes
-		
 		JLabel labelSi = new JLabel("Resultados SI");
 			labelSi.setBounds(65, 10, 100, 30);
 			labelSi.setFont(new Font("Times New Roman", Font.PLAIN, 14));
@@ -42,28 +42,39 @@ class VentanaPrincipal extends JFrame {
 			areaNo.getAutoscrolls();
 		add(areaNo);
 		
+		boton1 = new JButton("Generar");
+			boton1.setBounds(42, 260, 120, 30);
+		add(boton1);
+		
+		boton2 = new JButton("Limpiar");
+			boton2.setBounds(222, 260, 120, 30);
+		add(boton2);
+		
 	}
 	
 	public String[] generarDatos() {
 		int numero = 0; 
-		String[] arreglo = new String[100];
+		String[] arreglo = new String[1000];
 		
-		for(int i=0; i < 100; i++) {
+		for(int i=0; i < 1000; i++) {
 			numero = (int)(Math.random() * 100) + 1;
 			if( (numero % 2) == 0) {
 				arreglo[i] = "SI";
 			} else if((numero % 2) != 0) {
 				arreglo[i] = "NO";
 			}
+			System.out.println((i+1)+".- "+arreglo[i]);
 		}
 		return arreglo;
 	}
 }
 
-
 public class Concurrencia {
 
 	public static void main(String[] args) {
+		
+//		VentanaPrincipal vp = new VentanaPrincipal();
+//		vp.generarDatos();
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			
