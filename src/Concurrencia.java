@@ -42,8 +42,6 @@ class VentanaPrincipal extends JFrame {
 			areaNo.getAutoscrolls();
 		add(areaNo);
 		
-		
-		
 	}
 	
 	public String[] generarDatos() {
