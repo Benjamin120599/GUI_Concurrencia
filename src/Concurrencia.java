@@ -19,7 +19,7 @@ class VentanaPrincipal extends JFrame {
 		//Componentes
 		
 		JLabel labelSi = new JLabel("Resultados SI");
-			labelSi.setBounds(65, 15, 100, 30);
+			labelSi.setBounds(65, 10, 100, 30);
 			labelSi.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 		add(labelSi);
 		
