@@ -1,8 +1,10 @@
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-class VentanaPrincipal extends JFrame {
+class VentanaPrincipal extends JFrame implements ActionListener {
 	
 	JTextArea areaSi, areaNo;
 	JButton boton1, boton2;
@@ -50,6 +52,8 @@ class VentanaPrincipal extends JFrame {
 			boton2.setBounds(222, 260, 120, 30);
 		add(boton2);
 		
+		boton1.addActionListener(this);
+		boton2.addActionListener(this);
 	}
 	
 	public String[] generarDatos() {
@@ -66,6 +70,11 @@ class VentanaPrincipal extends JFrame {
 			System.out.println((i+1)+".- "+arreglo[i]);
 		}
 		return arreglo;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
 	}
 }
 
