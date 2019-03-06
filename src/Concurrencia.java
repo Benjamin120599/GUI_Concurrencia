@@ -30,6 +30,11 @@ class VentanaPrincipal extends JFrame {
 			areaSi.getAutoscrolls();
 		add(areaSi);
 		
+		JLabel labelNo = new JLabel("Resultados NO");
+			labelNo.setBounds(245, 10, 100, 30);
+			labelNo.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		add(labelNo);
+		
 		areaNo = new JTextArea();
 			areaNo.setBounds(210, 40, 150, 200);
 			areaNo.setEditable(false);
