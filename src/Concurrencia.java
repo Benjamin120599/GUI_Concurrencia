@@ -4,12 +4,63 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+class HiloLlenado implements Runnable {
+	VentanaPrincipal vp = new VentanaPrincipal();
+	Generador gen = new Generador();
+	
+	String[] arreglo = gen.generarDatos();
+	int cont1 = gen.cont1;
+	int cont2 = gen.cont2;
+	
+	@Override
+	public void run() {
+		String cadena1 = "";
+		for(int i=0; i<cont1; i++ ) {
+			cadena1 = cadena1 + "SI \n";
+		}
+		vp.areaSi.setText(cadena1);
+		
+		String cadena2 = "";
+		for(int i=0; i<cont2; i++ ) {
+			cadena2 = cadena2 + "NO \n";
+		}
+		vp.areaNo.setText(cadena2);
+	}
+	
+}
+
+class Generador {
+	
+	int numero = 0, cont1=0, cont2=0; 
+	
+	public String[] generarDatos() {
+		
+		String[] arreglo = new String[1000];
+		
+		for(int i=0; i < 1000; i++) {
+			numero = (int)(Math.random() * 100) + 1;
+			if( (numero % 2) == 0) {
+				arreglo[i] = "SI";
+				cont1++;
+			} else if((numero % 2) != 0) {
+				arreglo[i] = "NO";
+				cont2++;
+			}
+			//System.out.println((i+1)+".- "+arreglo[i]);
+		}
+		return arreglo;
+	}
+	
+}
+
 class VentanaPrincipal extends JFrame implements ActionListener {
 	
 	JTextArea areaSi, areaNo;
 	JButton boton1, boton2;
+	int contadorSi = 0, contadorNo = 0;
 	
 	public VentanaPrincipal() {
+				
 		getContentPane().setLayout(null);
 		getContentPane().setBackground(new Color(209, 209, 209));
 		setSize(400, 350);
@@ -45,45 +96,39 @@ class VentanaPrincipal extends JFrame implements ActionListener {
 		add(areaNo);
 		
 		boton1 = new JButton("Generar");
-			boton1.setBounds(42, 260, 120, 30);
+			boton1.setBounds(60, 260, 120, 30);
 		add(boton1);
 		
+		boton1.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Thread hilo1 = new Thread(new HiloLlenado());
+				hilo1.start();
+			}
+		});
+				
 		boton2 = new JButton("Limpiar");
-			boton2.setBounds(222, 260, 120, 30);
+			boton2.setBounds(210, 260, 120, 30);
 		add(boton2);
 		
-		boton1.addActionListener(this);
-		boton2.addActionListener(this);
 	}
 	
-	public String[] generarDatos() {
-		int numero = 0; 
-		String[] arreglo = new String[1000];
-		
-		for(int i=0; i < 1000; i++) {
-			numero = (int)(Math.random() * 100) + 1;
-			if( (numero % 2) == 0) {
-				arreglo[i] = "SI";
-			} else if((numero % 2) != 0) {
-				arreglo[i] = "NO";
-			}
-			System.out.println((i+1)+".- "+arreglo[i]);
-		}
-		return arreglo;
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
+		if(e.getSource() == "boton1") {
+			Thread hilo1 = new Thread(new HiloLlenado());
+			hilo1.start();
+		}
+		
 	}
+
 }
 
 public class Concurrencia {
 
 	public static void main(String[] args) {
-		
-//		VentanaPrincipal vp = new VentanaPrincipal();
-//		vp.generarDatos();
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			
