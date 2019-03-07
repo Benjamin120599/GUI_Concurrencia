@@ -5,28 +5,31 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 class HiloLlenado implements Runnable {
-	VentanaPrincipal vp = new VentanaPrincipal();
 	Generador gen = new Generador();
 	
 	String[] arreglo = gen.generarDatos();
-	int cont1 = gen.cont1;
-	int cont2 = gen.cont2;
 	
 	@Override
 	public void run() {
-		String cadena1 = "";
-		for(int i=0; i<cont1; i++ ) {
-			cadena1 = cadena1 + "SI \n";
+		int cont1=0, cont2=0;
+		for(int i=0; i<arreglo.length; i++) {
+			if(arreglo[i].equals("SI")) {
+				VentanaPrincipal.areaSi.append((cont1+1)+".- "+arreglo[i]+"\n");
+				cont1++;
+			} else if(arreglo[i].equals("NO")) {
+				VentanaPrincipal.areaNo.append((cont2+1)+".- "+arreglo[i]+"\n");
+				cont2++;
+			}
 		}
-		vp.areaSi.setText(cadena1);
-		
-		String cadena2 = "";
-		for(int i=0; i<cont2; i++ ) {
-			cadena2 = cadena2 + "NO \n";
-		}
-		vp.areaNo.setText(cadena2);
 	}
-	
+}
+
+class HiloHistograma implements Runnable {
+
+	@Override
+	public void run() {
+		
+	}
 }
 
 class Generador {
@@ -46,20 +49,18 @@ class Generador {
 				arreglo[i] = "NO";
 				cont2++;
 			}
-			//System.out.println((i+1)+".- "+arreglo[i]);
 		}
 		return arreglo;
-	}
-	
+	}	
 }
 
-class VentanaPrincipal extends JFrame implements ActionListener {
+class VentanaPrincipal extends JFrame {
 	
-	JTextArea areaSi, areaNo;
+	static JTextArea areaSi, areaNo;
 	JButton boton1, boton2;
 	int contadorSi = 0, contadorNo = 0;
-	
-	public VentanaPrincipal() {
+		
+	public void VentanaInicio() {
 				
 		getContentPane().setLayout(null);
 		getContentPane().setBackground(new Color(209, 209, 209));
@@ -77,11 +78,15 @@ class VentanaPrincipal extends JFrame implements ActionListener {
 		add(labelSi);
 		
 		areaSi = new JTextArea();
+			areaSi.setLineWrap(true);
 			areaSi.setBounds(30, 40, 150, 200);
 			areaSi.setEditable(false);
 			areaSi.setBorder(null);
-			areaSi.getAutoscrolls();
 		add(areaSi);
+		
+		JScrollPane scroll1 = new JScrollPane(areaSi);
+			scroll1.setBounds(30, 40, 150, 200);
+		add(scroll1);
 		
 		JLabel labelNo = new JLabel("Resultados NO");
 			labelNo.setBounds(245, 10, 100, 30);
@@ -89,11 +94,15 @@ class VentanaPrincipal extends JFrame implements ActionListener {
 		add(labelNo);
 		
 		areaNo = new JTextArea();
+			areaNo.setLineWrap(true);
 			areaNo.setBounds(210, 40, 150, 200);
 			areaNo.setEditable(false);
 			areaNo.setBorder(null);
-			areaNo.getAutoscrolls();
 		add(areaNo);
+		
+		JScrollPane scroll2 = new JScrollPane(areaNo);
+			scroll2.setBounds(210, 40, 150, 200);
+		add(scroll2);
 		
 		boton1 = new JButton("Generar");
 			boton1.setBounds(60, 260, 120, 30);
@@ -112,18 +121,15 @@ class VentanaPrincipal extends JFrame implements ActionListener {
 			boton2.setBounds(210, 260, 120, 30);
 		add(boton2);
 		
+		boton2.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				areaSi.setText("");
+				areaNo.setText("");
+			}
+		});	
 	}
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-		if(e.getSource() == "boton1") {
-			Thread hilo1 = new Thread(new HiloLlenado());
-			hilo1.start();
-		}
-		
-	}
-
 }
 
 public class Concurrencia {
@@ -134,7 +140,7 @@ public class Concurrencia {
 			
 			@Override
 			public void run() {
-				new VentanaPrincipal();
+				new VentanaPrincipal().VentanaInicio();;
 			}
 		});
 		
