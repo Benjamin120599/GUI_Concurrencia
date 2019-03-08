@@ -6,12 +6,17 @@ import java.awt.event.ActionListener;
 
 class HiloLlenado implements Runnable {
 	Generador gen = new Generador();
-	
 	String[] arreglo = gen.generarDatos();
+
+	static int cont1=0, cont2=0;
 	
 	@Override
 	public void run() {
-		int cont1=0, cont2=0;
+		VentanaPrincipal.areaSi.setText("");
+		VentanaPrincipal.areaNo.setText("");
+		cont1=0;
+		cont2=0;
+		
 		for(int i=0; i<arreglo.length; i++) {
 			if(arreglo[i].equals("SI")) {
 				VentanaPrincipal.areaSi.append((cont1+1)+".- "+arreglo[i]+"\n");
@@ -24,11 +29,45 @@ class HiloLlenado implements Runnable {
 	}
 }
 
-class HiloHistograma implements Runnable {
-
+class HiloHistograma1 implements Runnable {
+	int contSi = VentanaPrincipal.areaSi.getLineCount();
+	int contNo = VentanaPrincipal.areaNo.getLineCount();
 	@Override
 	public void run() {
 		
+		//System.out.println(contSi-1);
+		for(int i=0; i <= contSi-1; i++) {
+			VentanaPrincipal.barraSi.setValue(i);
+			VentanaPrincipal.barraSi.repaint();
+			VentanaPrincipal.barraSi.setForeground(new Color(8, 106, 211));
+			
+			try {
+				Thread.sleep(5);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}
+
+class HiloHistograma2 implements Runnable {
+	int contSi = VentanaPrincipal.areaSi.getLineCount();
+	int contNo = VentanaPrincipal.areaNo.getLineCount();
+	@Override
+	public void run() {
+		
+		//System.out.println(contSi-1);
+		for(int i=0; i <= contNo-1; i++) {
+			VentanaPrincipal.barraNo.setValue(i);
+			VentanaPrincipal.barraNo.repaint();
+			VentanaPrincipal.barraNo.setForeground(new Color(211, 8, 8));
+			
+			try {
+				Thread.sleep(5);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
 
@@ -56,7 +95,9 @@ class Generador {
 
 class VentanaPrincipal extends JFrame {
 	
+	Generador gen = new Generador();
 	static JTextArea areaSi, areaNo;
+	static JProgressBar barraSi, barraNo;
 	JButton boton1, boton2;
 	int contadorSi = 0, contadorNo = 0;
 		
@@ -64,7 +105,7 @@ class VentanaPrincipal extends JFrame {
 				
 		getContentPane().setLayout(null);
 		getContentPane().setBackground(new Color(209, 209, 209));
-		setSize(400, 350);
+		setSize(400, 450);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -104,8 +145,28 @@ class VentanaPrincipal extends JFrame {
 			scroll2.setBounds(210, 40, 150, 200);
 		add(scroll2);
 		
+		JLabel si = new JLabel("Si.");
+			si.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+			si.setBounds(30, 270, 100, 30);
+		add(si);
+		
+		barraSi = new JProgressBar(0, gen.generarDatos().length);
+			barraSi.setBounds(80, 270, 260, 30);
+			barraSi.setStringPainted(true);
+		add(barraSi);
+		
+		JLabel no = new JLabel("No.");
+			no.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+			no.setBounds(30, 310, 100, 30);
+		add(no);
+		
+		barraNo = new JProgressBar(0, gen.generarDatos().length);
+			barraNo.setBounds(80, 310, 260, 30);
+			barraNo.setStringPainted(true);
+		add(barraNo);
+		
 		boton1 = new JButton("Generar");
-			boton1.setBounds(60, 260, 120, 30);
+			boton1.setBounds(60, 360, 120, 30);
 		add(boton1);
 		
 		boton1.addActionListener(new ActionListener() {
@@ -114,11 +175,22 @@ class VentanaPrincipal extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Thread hilo1 = new Thread(new HiloLlenado());
 				hilo1.start();
+				try {
+					hilo1.join();
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				Thread hilo2 = new Thread(new HiloHistograma1());
+				hilo2.start();
+				Thread hilo3 = new Thread(new HiloHistograma2());
+				hilo3.start();
+				
 			}
 		});
 				
 		boton2 = new JButton("Limpiar");
-			boton2.setBounds(210, 260, 120, 30);
+			boton2.setBounds(210, 360, 120, 30);
 		add(boton2);
 		
 		boton2.addActionListener(new ActionListener() {
@@ -127,6 +199,8 @@ class VentanaPrincipal extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				areaSi.setText("");
 				areaNo.setText("");
+				barraSi.setValue(0);
+				barraNo.setValue(0);
 			}
 		});	
 	}
