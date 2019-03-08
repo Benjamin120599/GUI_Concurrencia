@@ -42,7 +42,7 @@ class HiloHistograma1 implements Runnable {
 			VentanaPrincipal.barraSi.setForeground(new Color(8, 106, 211));
 			
 			try {
-				Thread.sleep(5);
+				Thread.sleep(1);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -63,7 +63,7 @@ class HiloHistograma2 implements Runnable {
 			VentanaPrincipal.barraNo.setForeground(new Color(211, 8, 8));
 			
 			try {
-				Thread.sleep(5);
+				Thread.sleep(1);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
