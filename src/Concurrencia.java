@@ -5,18 +5,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 class HiloLlenado implements Runnable {
-	Generador gen = new Generador();
-	String[] arreglo = gen.generarDatos();
-
-	static int cont1=0, cont2=0;
+	final String[] arreglo = new Generador().generarDatos();
 	
 	@Override
 	public void run() {
 		VentanaPrincipal.areaSi.setText("");
 		VentanaPrincipal.areaNo.setText("");
-		cont1=0;
-		cont2=0;
-		
+		int cont1=0, cont2=0;
 		for(int i=0; i<arreglo.length; i++) {
 			if(arreglo[i].equals("SI")) {
 				VentanaPrincipal.areaSi.append((cont1+1)+".- "+arreglo[i]+"\n");
@@ -31,18 +26,17 @@ class HiloLlenado implements Runnable {
 
 class HiloHistograma1 implements Runnable {
 	int contSi = VentanaPrincipal.areaSi.getLineCount();
-	int contNo = VentanaPrincipal.areaNo.getLineCount();
+
 	@Override
 	public void run() {
 		
-		//System.out.println(contSi-1);
-		for(int i=0; i <= contSi-1; i++) {
+		for(int i=0; i <= contSi; i++) {
 			VentanaPrincipal.barraSi.setValue(i);
 			VentanaPrincipal.barraSi.repaint();
 			VentanaPrincipal.barraSi.setForeground(new Color(8, 106, 211));
 			
 			try {
-				Thread.sleep(1);
+				Thread.sleep(2);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -51,19 +45,18 @@ class HiloHistograma1 implements Runnable {
 }
 
 class HiloHistograma2 implements Runnable {
-	int contSi = VentanaPrincipal.areaSi.getLineCount();
 	int contNo = VentanaPrincipal.areaNo.getLineCount();
+		
 	@Override
 	public void run() {
-		
-		//System.out.println(contSi-1);
-		for(int i=0; i <= contNo-1; i++) {
+
+		for(int i=0; i <= contNo; i++) {
 			VentanaPrincipal.barraNo.setValue(i);
 			VentanaPrincipal.barraNo.repaint();
 			VentanaPrincipal.barraNo.setForeground(new Color(211, 8, 8));
 			
 			try {
-				Thread.sleep(1);
+				Thread.sleep(2);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -77,9 +70,9 @@ class Generador {
 	
 	public String[] generarDatos() {
 		
-		String[] arreglo = new String[10000];
+		String[] arreglo = new String[1000];
 		
-		for(int i=0; i < 10000; i++) {
+		for(int i=0; i < 1000; i++) {
 			numero = (int)(Math.random() * 100) + 1;
 			if( (numero % 2) == 0) {
 				arreglo[i] = "SI";
@@ -178,9 +171,9 @@ class VentanaPrincipal extends JFrame {
 				try {
 					hilo1.join();
 				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				
 				Thread hilo2 = new Thread(new HiloHistograma1());
 				hilo2.start();
 				Thread hilo3 = new Thread(new HiloHistograma2());
