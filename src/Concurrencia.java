@@ -70,9 +70,9 @@ class Generador {
 	
 	public String[] generarDatos() {
 		
-		String[] arreglo = new String[1000];
+		String[] arreglo = new String[100000];
 		
-		for(int i=0; i < 1000; i++) {
+		for(int i=0; i < 100000; i++) {
 			numero = (int)(Math.random() * 100) + 1;
 			if( (numero % 2) == 0) {
 				arreglo[i] = "SI";
